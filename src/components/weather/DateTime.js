@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, {useEffect, useState} from 'react'
+import moment from 'moment-timezone'
 
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -17,7 +18,7 @@ const WeatherItem = ({title, value, unit}) => {
     )
 }
 
-const DateTime = () => {
+const DateTime = ({current, timezone,lat, lon}) => {
     const [date, setDate] = useState('')
     const [time, setTime] = useState('')
 
@@ -50,17 +51,17 @@ return (
                 <Text style={weather.subhadling}>{date}</Text>
             </View>
             <View style={weather.witherItemContain}>
-                <WeatherItem title="Humidity" value="79" unit="%" />
-                <WeatherItem title="Pressur" value="1000" unit="hPA" />
-                <WeatherItem title="Sunrise" value="06:00" unit="am" />
-                <WeatherItem title="Sunset" value="06:30" unit="pm" />
+                <WeatherItem title="Humidity" value={current? current.humidity : ""}  unit="%" />
+                <WeatherItem title="Pressur" value={current ? current.pressure : ""} unit="hPA" />
+                <WeatherItem title="Sunrise" value={current ? moment.tz(current.sunrise * 1000, timezone).format('HH:mm') : ""}  unit="am" />
+                <WeatherItem title="Sunset" value={current ? moment.tz(current.sunset * 1000, timezone).format('HH:mm') : ""}  unit="pm" />
             </View>
         </View>
 
         
         <View style={weather.right}>
-            <Text style={weather.timezone}></Text>
-            <Text style={weather.latlong}>4.22N 50E</Text>
+            <Text style={weather.timezone}>{timezone}</Text>
+            <Text style={weather.latlong}>{lat}N {lon}E</Text>
         </View>
     </View>
 )
